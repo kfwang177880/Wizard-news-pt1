@@ -2,7 +2,7 @@ const express = require("express");
 const morgan = require('morgan');
 const postBank = require("./postBank");
 const postContent = require('./postContent');
-const timeAgo= require('node-time-ago')
+const postList = require('./postList');
 
 const PORT = 1337
 const app = express();
@@ -13,43 +13,12 @@ app.use(express.static('public'));
 app.use(express.json())
 app.use(express.urlencoded({ extended: true}))
 
-app.get("/", (req, res) => {
-  const posts = postBank.list();
-  const html = `<!DOCTYPE html>
-  <html>
-    <head>
-      <title>Wizard News</title>
-      <header><img src="/logo.png"/>Wizard News</header>      
-    </head>
-    <body>
-      ${posts.map(list=> `
-      <div class='new-item'>
-        <p>
-          <span class="news-position"> ${list.id} .</span> 
-          <a href=posts/${list.id}>${list.title}</a>
-          <small>(by ${list.name}) </small>
-        </p>
-        <small class="news-info">
-          ${list.upvotes} upvotes | ${timeAgo(list.date)}
-        </small>
-      </div>`
-      ).join('')}
-    </body>
-  </html>`
-
-// send response
-  res.send(html);
-})
-
-
-/*
 app.get('/posts', (req, res) => {
   const list = postBank.list();
 //  console.log('i am here==> ',list)
   res.send(postList(list))
 })
 // send response
-*/
 app.get('/posts/:id', (req, res,next) => {
   const post = postBank.find(req.params.id);
   if (!post.id) {
@@ -71,3 +40,4 @@ app.use(function (err, req, res, next) {
 app.listen(PORT,() => {
   console.log(`listening on port ${PORT}`) ;
 });
+

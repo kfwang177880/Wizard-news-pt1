@@ -96,5 +96,5 @@ const data = [{ id: 1,
       return {...post}
     }
     
-    module.exports = {list:list, find:find}; 
+    module.exports = { list: list, find: find }; 
     
